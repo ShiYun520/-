@@ -4,13 +4,13 @@
 - 下载源码文件到本地
 - 上传源码到宝塔或其他面板
 - 创建数据库并上传源码内的数据库
-- 修改源码内
+- 修改源码内文件数据库信息
 ~~~
 - delete_subscription.php
 - subscriptions.php
 - api.php
 ~~~
-文件数据库信息
+以下为修改内容
 ~~~
 $host = 'localhost';
 $dbname = 'subscription_db';
