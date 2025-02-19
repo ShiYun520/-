@@ -9,8 +9,8 @@
 - delete_subscription.php
 - subscriptions.php
 - api.php
-- 文件数据库信息
 ~~~
+文件数据库信息
 ~~~
 $host = 'localhost';
 $dbname = 'subscription_db';
