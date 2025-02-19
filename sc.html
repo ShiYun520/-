@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订阅上传</title>
+    <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f6f9fc, #e9ecef);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin: 40px 0;
+    font-size: 2.5em;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 60px;
+    padding: 40px;
+    background-color: #ffffff;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+label {
+    font-size: 0.95em;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="url"] {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4263eb;
+    box-shadow: 0 0 0 3px rgba(66, 99, 235, 0.1);
+    background-color: #fff;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4263eb, #364fc7);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(66, 99, 235, 0.2);
+    background: linear-gradient(135deg, #364fc7, #2b3f9e);
+}
+
+.query-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #37b24d, #2f9e44);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.query-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(55, 178, 77, 0.2);
+    background: linear-gradient(135deg, #2f9e44, #2b8a3e);
+}
+
+#message {
+    margin-top: 20px;
+    text-align: center;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.error {
+    color: #e03131;
+    background-color: #fff5f5;
+    border: 1px solid #ffc9c9;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.success {
+    color: #2b8a3e;
+    background-color: #f4fce3;
+    border: 1px solid #d8f5a2;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin: 30px 0;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="url"] {
+        padding: 10px 14px;
+    }
+
+    button[type="submit"],
+    .query-btn {
+        padding: 12px;
+    }
+}
+
+/* 添加输入框焦点动画 */
+@keyframes input-focus {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+input:focus {
+    animation: input-focus 0.3s ease;
+}
+
+/* 添加表单提交成功动画 */
+@keyframes success-message {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.success {
+    animation: success-message 0.5s ease forwards;
+}
+
+    </style>
+</head>
+<body>
+
+    <h1>上传订阅数据</h1>
+
+    <div class="container">
+        <form id="subscriptionForm">
+            <label for="name">订阅名称:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="traffic">可用流量:</label>
+            <input type="number" id="traffic" name="traffic" required><br>
+
+            <label for="days">剩余天数:</label>
+            <input type="number" id="days" name="days" required><br>
+
+            <label for="uploadTime">上传时间:</label>
+            <input type="date" id="uploadTime" name="uploadTime" value="<?php echo date('Y-m-d'); ?>" required><br>
+
+            <label for="link">链接:</label>
+            <input type="url" id="link" name="link"><br>
+
+            <button type="submit">提交</button>
+        </form>
+
+        <div id="message"></div>
+
+        <button class="query-btn" onclick="window.location.href='subscriptions.php'">订阅查询</button>
+    </div>
+
+    <script>
+        // 处理表单提交
+        document.getElementById("subscriptionForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                name: document.getElementById("name").value,
+                traffic: document.getElementById("traffic").value,
+                days: document.getElementById("days").value,
+                uploadTime: document.getElementById("uploadTime").value,
+                link: document.getElementById("link").value
+            };
+
+            // 使用 Fetch API 发送 POST 请求
+            fetch('api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById("message");
+                if (data.error) {
+                    messageDiv.innerHTML = `<p class="error">${data.error}</p>`;
+                } else {
+                    messageDiv.innerHTML = `<p class="success">${data.message}</p>`;
+                    document.getElementById("subscriptionForm").reset(); // 清空表单
+                }
+            })
+            .catch(error => {
+                document.getElementById("message").innerHTML = `<p class="error">发生错误: ${error.message}</p>`;
+            });
+        });
+    </script>
+
+</body>
+</html>

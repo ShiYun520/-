@@ -1,0 +1,131 @@
+body {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+h2 {
+    color: #2c3e50;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.table {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.table:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    padding: 15px;
+    border-top: 1px solid #e9ecef;
+}
+
+.table thead th {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: none;
+}
+
+.pagination {
+    margin-top: 30px;
+}
+
+.pagination .page-item .page-link {
+    color: #007bff;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* 详情行的样式 */
+.details-row {
+    background-color: #f8f9fa;
+    display: none;
+    text-align: left;
+    border-left: 4px solid #007bff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.details-row td {
+    padding: 20px;
+    color: #333;
+}
+
+.details-header {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* 添加按钮样式 */
+.btn-info {
+    background: linear-gradient(45deg, #17a2b8, #138496);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .table {
+        font-size: 14px;
+    }
+    
+    .table th,
+    .table td {
+        padding: 10px;
+    }
+    
+    .btn-info {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}
+
+/* 添加动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.details-row.show {
+    display: table-row;
+    animation: fadeIn 0.5s ease;
+}

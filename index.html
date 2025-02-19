@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>免费订阅分享平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 表格样式 */
+        .table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-row {
+            background-color: #f8f9fa;
+            display: none; /* 默认隐藏 */
+            border-left: 4px solid #007bff;
+        }
+
+        /* 美化详情内容 */
+        .details-row td {
+            padding: 20px;
+           text-align: left; /* 调整为左对齐 */
+           color: #333;
+           font-size: 14px;
+        }
+
+        .details-content {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #ffffff; /* 白色背景 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+        }
+
+        .details-header {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: left; /* 标题左对齐 */
+        }
+
+        /* 美化每行详情内容 */
+        .details-item {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .details-item strong {
+            color: #555;
+        }
+
+        /* 链接美化 */
+        .details-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .details-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* 分页按钮样式 */
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h2 class="text-center mb-4">免费订阅分享平台</h2>
+        <table class="table table-hover table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">订阅名称</th>
+                    <th scope="col">可用流量 (G)</th>
+                    <th scope="col">剩余天数</th>
+                    <th scope="col">上传时间</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- 数据将通过 JS 动态插入 -->
+            </tbody>
+        </table>
+
+        <!-- 分页按钮容器 -->
+        <nav>
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- 动态分页按钮 -->
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        let data = []; // 全局数据变量
+        const rowsPerPage = 6; // 每页显示的行数
+        let currentPage = 1; // 当前页
+
+        // 获取数据并渲染到表格
+        async function fetchData() {
+            try {
+                const response = await fetch('api.php'); // 请求 API
+                const apiData = await response.json();
+                data = apiData; // 将 API 数据赋值给全局变量 data
+                renderTable(); // 渲染表格
+                renderPagination(); // 渲染分页
+            } catch (error) {
+                console.error('获取数据失败:', error);
+            }
+        }
+
+        // 渲染表格数据
+        function renderTable() {
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = ''; // 清空表格内容
+
+            const start = (currentPage - 1) * rowsPerPage; // 当前页起始索引
+            const end = start + rowsPerPage; // 当前页结束索引
+            const currentData = data.slice(start, end); // 当前页的数据
+
+            currentData.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.traffic}</td>
+                        <td>${item.days}</td>
+                        <td>${item.uploadTime}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm" onclick="toggleDetails(${item.id})">详情</button>
+                        </td>
+                    </tr>
+                    <tr class="details-row" id="details-${item.id}">
+                        <td colspan="5">
+                            <div class="details-content">
+                                <div class="details-header">订阅详细信息</div>
+                                <div class="details-item"><strong>订阅名称：</strong> ${item.name}</div>
+                                <div class="details-item"><strong>可用流量：</strong> ${item.traffic} G</div>
+                                <div class="details-item"><strong>剩余天数：</strong> ${item.days}</div>
+                                <div class="details-item"><strong>上传时间：</strong> ${item.uploadTime}</div>
+                                <div class="details-item details-link">
+                                    <strong>链接：</strong> <a href="${item.link}" target="_blank">${item.link}</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        // 渲染分页按钮
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = ''; // 清空分页内容
+
+            const totalPages = Math.ceil(data.length / rowsPerPage); // 总页数
+
+            // 上一页按钮
+            const prevButton = `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">&laquo;</a>
+                </li>
+            `;
+            pagination.insertAdjacentHTML('beforeend', prevButton);
+
+            // 页码按钮
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                    </li>
+                `;
+                pagination.insertAdjacentHTML('beforeend', pageButton);
+            }
+
+            // 下一页按钮
+            const nextButton = `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">&raquo;</a>
+                </li>
+            `;
+            pagination.insertAdjacentHTML('beforeend', nextButton);
+        }
+
+        // 切换页面
+        function changePage(page) {
+            const totalPages = Math.ceil(data.length / rowsPerPage); // 总页数
+            if (page < 1 || page > totalPages) return; // 如果页码超出范围，直接返回
+            currentPage = page; // 更新当前页
+            renderTable(); // 重新渲染表格
+            renderPagination(); // 重新渲染分页
+        }
+
+        // 切换详情显示/隐藏
+        function toggleDetails(id) {
+            const detailsRow = document.getElementById(`details-${id}`);
+            if (detailsRow.style.display === 'none' || !detailsRow.style.display) {
+                detailsRow.style.display = 'table-row'; // 显示详情
+            } else {
+                detailsRow.style.display = 'none'; // 隐藏详情
+            }
+        }
+
+        // 页面加载时获取数据
+        fetchData();
+    </script>
+</body>
+</html>
